@@ -10,6 +10,6 @@ variable "FOLDER_ID" {
     type = string
 }
 
-variable "ZONE" {
-    type = string
-}
+#variable "ZONE" {
+#    type = string
+#}
