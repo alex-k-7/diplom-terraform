@@ -51,6 +51,7 @@ resource "yandex_compute_instance" "nat" {
         nat        = true
     }
 }
+*/
 # virtual machines #
  resource "yandex_compute_instance" "vm1" {
     name = "public-vm"
@@ -68,7 +69,7 @@ resource "yandex_compute_instance" "nat" {
         }
     }
     network_interface {
-        subnet_id = "${yandex_vpc_subnet.netology-subnet-a.id}"
+        subnet_id = "e9bc2b6h6eof7gp76l54"
         nat       = true
     }
     metadata = {
@@ -92,11 +93,10 @@ resource "yandex_compute_instance" "vm2" {
         }
     }
     network_interface {
-        subnet_id = "${yandex_vpc_subnet.netology-subnet-b.id}"
+        subnet_id = "e2lnvult7bk2kmov69fi"
     }
-    metadata = {
-        serial-port-enable = 1
-        user-data = "${file(".terraform/user-data.txt")}"
-    }
+    #metadata = {
+    #    serial-port-enable = 1
+    #    user-data = "${file(".terraform/user-data.txt")}"
+    #}
 }
-*/
