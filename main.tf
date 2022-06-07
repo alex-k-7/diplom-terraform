@@ -4,6 +4,18 @@ provider "yandex" {
     folder_id = var.FOLDER_ID
 }
 
+# service account #
+resource "yandex_iam_service_account" "sa-fm" {
+  name        = "folder-manager"
+  description = "service account to manage resources in netology-diplom folder"
+}
+
+resource "yandex_resourcemanager_folder_iam_member" "f-edit" {
+    folder_id = var.FOLDER_ID
+    role      = "editor"
+    member    = "serviceAccount:${yandex_iam_service_account.sa-fm.id}"
+}
+
 # network #
 resource "yandex_vpc_network" "net-1" {
     name = "net-1"
