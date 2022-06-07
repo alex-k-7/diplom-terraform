@@ -9,26 +9,13 @@ resource "yandex_vpc_network" "net-1" {
     name = "net-1"
 }
 
-resource "yandex_vpc_subnet" "net-1-subnet-a" {
-    name           = "subnet-a"
-    v4_cidr_blocks = ["192.168.10.0/24"]
-    zone           = "ru-central1-a"
+resource "yandex_vpc_subnet" "subnet" {
+    for_each = var.ZONE
+    zone           = each.key
+    v4_cidr_blocks = [each.value]
     network_id     = "${yandex_vpc_network.net-1.id}"
 }
 
-resource "yandex_vpc_subnet" "net-1-subnet-b" {
-    name           = "subnet-b"
-    v4_cidr_blocks = ["192.168.20.0/24"]
-    zone           = "ru-central1-b"
-    network_id     = "${yandex_vpc_network.net-1.id}"
-}
-
-resource "yandex_vpc_subnet" "net-1-subnet-c" {
-    name           = "subnet-c"
-    v4_cidr_blocks = ["192.168.30.0/24"]
-    zone           = "ru-central1-c"
-    network_id     = "${yandex_vpc_network.net-1.id}"
-}
 /*
 # nat-instance #
 resource "yandex_compute_instance" "nat" {
