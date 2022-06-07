@@ -72,9 +72,9 @@ resource "yandex_compute_instance" "nat" {
         subnet_id = "e9bc2b6h6eof7gp76l54"
         nat       = true
     }
-    metadata = {
-        ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
-    }
+    #metadata = {
+    #    ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
+    #}
 } 
 
 resource "yandex_compute_instance" "vm2" {
