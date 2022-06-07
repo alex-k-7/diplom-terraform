@@ -55,9 +55,8 @@ resource "yandex_compute_instance" "nat" {
 # virtual machines #
  resource "yandex_compute_instance" "vm" {
     for_each  = yandex_vpc_subnet.subnet
-    #for_each = var.ZONE
-    #zone = each.key
-    name = "node-${each.key}"
+    zone = each.key
+    #name = "node-${each.key}"
     scheduling_policy {
         preemptible = true
     } 
