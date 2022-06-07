@@ -6,8 +6,8 @@ provider "yandex" {
 
 # service account #
 resource "yandex_iam_service_account" "sa-fm" {
-  name        = "folder-manager"
-  description = "service account to manage resources in netology-diplom folder"
+    name        = "folder-manager"
+    description = "service account to manage resources in netology-diplom folder"
 }
 
 resource "yandex_resourcemanager_folder_iam_member" "f-edit" {
@@ -53,14 +53,17 @@ resource "yandex_compute_instance" "nat" {
 }
 */
 # virtual machines #
- resource "yandex_compute_instance" "vm1" {
-    name = "public-vm"
+ resource "yandex_compute_instance" "vm" {
+    for_each  = yandex_vpc_subnet.subnet
+    #for_each = var.ZONE
+    #zone = each.key
+    name = "node-${each.key}"
     scheduling_policy {
         preemptible = true
     } 
     resources {
-        cores  = 2
-        memory = 2
+        cores         = 2
+        memory        = 2
         core_fraction = 20
     }
     boot_disk {
@@ -69,14 +72,14 @@ resource "yandex_compute_instance" "nat" {
         }
     }
     network_interface {
-        subnet_id = "e9bc2b6h6eof7gp76l54"
+        subnet_id = each.value.id
         nat       = true
     }
     #metadata = {
     #    ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
     #}
 } 
-
+/*
 resource "yandex_compute_instance" "vm2" {
     name = "private-vm"
     scheduling_policy {
@@ -100,3 +103,4 @@ resource "yandex_compute_instance" "vm2" {
     #    user-data = "${file(".terraform/user-data.txt")}"
     #}
 }
+*/
