@@ -43,6 +43,7 @@ resource "yandex_vpc_subnet" "subnet" {
     boot_disk {
         initialize_params {
             image_id = "fd86cpunl4kkspv0u25a"
+            size = 20
         }
     }
     network_interface {
