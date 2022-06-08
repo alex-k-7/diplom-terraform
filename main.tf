@@ -51,7 +51,7 @@ resource "yandex_vpc_subnet" "subnet" {
         nat       = true
     }
     metadata = {
-        ssh-keys            = var.SSH_KEY
+        #ssh-keys            = var.SSH_KEY
         serial-port-enable  = 1
         user-data           = "${file("user-data.txt")}"
     }
