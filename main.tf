@@ -7,7 +7,7 @@ provider "yandex" {
 # service account #
 resource "yandex_iam_service_account" "sa-fm" {
     name        = "folder-manager"
-    description = "service account to manage resources in netology-diplom folder"
+    description = "to manage resources in netology-diplom folder"
 }
 
 resource "yandex_resourcemanager_folder_iam_member" "f-edit" {
@@ -28,7 +28,7 @@ resource "yandex_vpc_subnet" "subnet" {
     network_id     = "${yandex_vpc_network.net-1.id}"
 }
 
-/*
+
 # nat-instance #
 resource "yandex_compute_instance" "nat" {
     name = "nat-instance"
@@ -51,7 +51,7 @@ resource "yandex_compute_instance" "nat" {
         nat        = true
     }
 }
-*/
+
 # virtual machines #
  resource "yandex_compute_instance" "vm" {
     for_each  = yandex_vpc_subnet.subnet
@@ -74,32 +74,8 @@ resource "yandex_compute_instance" "nat" {
         subnet_id = each.value.id
         nat       = true
     }
-    #metadata = {
-    #    ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
-    #}
+    metadata = {
+        serial-port-enable = 1
+        user-data = "${file("user-data.txt")}"
+    }
 } 
-/*
-resource "yandex_compute_instance" "vm2" {
-    name = "private-vm"
-    scheduling_policy {
-        preemptible = true
-    }
-    resources {
-        cores  = 2
-        memory = 2
-        core_fraction = 20
-    }
-    boot_disk {
-        initialize_params {
-            image_id = "fd86cpunl4kkspv0u25a"
-        }
-    }
-    network_interface {
-        subnet_id = "e2lnvult7bk2kmov69fi"
-    }
-    #metadata = {
-    #    serial-port-enable = 1
-    #    user-data = "${file(".terraform/user-data.txt")}"
-    #}
-}
-*/

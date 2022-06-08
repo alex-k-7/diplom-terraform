@@ -1,0 +1,8 @@
+#cloud-config
+users:
+  - name: aks
+    groups: [ sudo ]
+    sudo: [ "ALL=(ALL) NOPASSWD:ALL" ]
+    shell: /bin/bash
+    lock_passwd: false
+    passwd: $5$07njg5vz5W$eHlqw/ApLe6dIx6HdvavAipVu8kIsbA4y7OISyGwc.9
