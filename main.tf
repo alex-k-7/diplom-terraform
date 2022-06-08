@@ -28,30 +28,6 @@ resource "yandex_vpc_subnet" "subnet" {
     network_id     = "${yandex_vpc_network.net-1.id}"
 }
 
-
-# nat-instance #
-resource "yandex_compute_instance" "nat" {
-    name = "nat-instance"
-    scheduling_policy {
-        preemptible = true
-    }
-    resources {
-        cores  = 2
-        memory = 1
-        core_fraction = 20
-    }
-    boot_disk {
-        initialize_params {
-            image_id = "fd80mrhj8fl2oe87o4e1"
-        }
-    }
-    network_interface {
-        subnet_id  = "${yandex_vpc_subnet.netology-subnet-a.id}"
-        ip_address = "192.168.10.254"
-        nat        = true
-    }
-}
-
 # virtual machines #
  resource "yandex_compute_instance" "vm" {
     for_each  = yandex_vpc_subnet.subnet
