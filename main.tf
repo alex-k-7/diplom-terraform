@@ -32,14 +32,13 @@ resource "yandex_vpc_subnet" "subnet" {
  resource "yandex_compute_instance" "vm" {
     for_each  = yandex_vpc_subnet.subnet
     zone = each.key
-    #name = "node-${each.key}"
     scheduling_policy {
         preemptible = true
-    } 
+    }
     resources {
         cores         = 2
         memory        = 2
-        core_fraction = 20
+        core_fraction = 50
     }
     boot_disk {
         initialize_params {
@@ -51,7 +50,9 @@ resource "yandex_vpc_subnet" "subnet" {
         nat       = true
     }
     metadata = {
-        serial-port-enable = 1
-        user-data = "${file("user-data.txt")}"
+        ssh-keys            = var.SSH_KEY
+        serial-port-enable  = 1
+        user-data           = "${file("user-data.txt")}"
     }
+    service_account_id = "${yandex_iam_service_account.sa-fm.id}"
 } 

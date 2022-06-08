@@ -13,3 +13,7 @@ variable "FOLDER_ID" {
 variable "ZONE" {
     type = map
 }
+
+variable "SSH_KEY" {
+    type = string
+}
