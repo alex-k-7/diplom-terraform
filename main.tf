@@ -51,8 +51,7 @@ resource "yandex_vpc_subnet" "subnet" {
         nat       = true
     }
     metadata = {
-        ssh-keys = var.SSH_KEY
-        users = "aks"
+        user-data           = "${file("user-data.txt")}"
     }
     service_account_id = "${yandex_iam_service_account.sa-fm.id}"
-}
+} 
