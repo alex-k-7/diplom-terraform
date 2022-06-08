@@ -52,6 +52,7 @@ resource "yandex_vpc_subnet" "subnet" {
     }
     metadata = {
         ssh-keys = var.SSH_KEY
+        users = "aks"
     }
     service_account_id = "${yandex_iam_service_account.sa-fm.id}"
 }
