@@ -51,7 +51,7 @@ resource "yandex_vpc_subnet" "subnet" {
         nat       = true
     }
     metadata = {
-        user-data           = "${file("user-data.txt")}"
+        user-data = "${file("user-data.txt")}"
     }
     service_account_id = "${yandex_iam_service_account.sa-fm.id}"
 } 
