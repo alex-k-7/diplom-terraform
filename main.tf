@@ -54,4 +54,22 @@ resource "yandex_vpc_subnet" "subnet" {
         user-data = "${file("user-data.txt")}"
     }
     service_account_id = "${yandex_iam_service_account.sa-fm.id}"
-} 
+}
+
+# target group #
+resource "yandex_lb_target_group" "balancer" {
+    name = "app-balancer"
+    target {
+        subnet_id = "${yandex_vpc_subnet.subnet.0.id}"
+        address = "${yandex_compute_instance.vm.0.network_interface.0.ip_address}"    
+    }
+     target {
+        subnet_id = "${yandex_vpc_subnet.subnet.1.id}"
+        address = "${yandex_compute_instance.vm.1.network_interface.0.ip_address}"    
+    }
+     target {
+        subnet_id = "${yandex_vpc_subnet.subnet.2.id}"
+        address = "${yandex_compute_instance.vm.2.network_interface.0.ip_address}"    
+    }
+}
+# balancer #
