@@ -56,20 +56,30 @@ resource "yandex_vpc_subnet" "subnet" {
     service_account_id = "${yandex_iam_service_account.sa-fm.id}"
 }
 
+output "vm_ids" {
+  value = {
+    for k, v in yandex_compute_instance.vm : k => v.id
+  }
+}
+
 # target group #
-resource "yandex_lb_target_group" "balancer" {
+/*resource "yandex_lb_target_group" "for-balancer" {
     name = "app-balancer"
     target {
-        subnet_id = "${yandex_vpc_subnet.subnet.0.id}"
+        subnet_id = "${yandex_vpc_subnet.subnet.id.ru-central1-c}"
         address = "${yandex_compute_instance.vm.0.network_interface.0.ip_address}"    
     }
-     target {
+   /*  target {
         subnet_id = "${yandex_vpc_subnet.subnet.1.id}"
         address = "${yandex_compute_instance.vm.1.network_interface.0.ip_address}"    
     }
      target {
         subnet_id = "${yandex_vpc_subnet.subnet.2.id}"
         address = "${yandex_compute_instance.vm.2.network_interface.0.ip_address}"    
-    }
-}
+    }*/
+#}
 # balancer #
+
+output "subnets" {
+    value = yandex_vpc_subnet.subnet
+}
