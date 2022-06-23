@@ -105,5 +105,5 @@ resource "yandex_lb_network_load_balancer" "lb-1" {
 
 
 output "subnets" {
-    value = yandex_vpc_subnet.subnet
+    value = { for k, v in yandex_vpc_subnet.subnet : k => v.id }
 }
