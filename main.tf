@@ -57,10 +57,8 @@ resource "yandex_vpc_subnet" "subnet" {
 }
 
 output "vm_ids" {
-  #value = yandex_compute_instance.vm.
-    for k, v in yandex_compute_instance.vm : k => v.id
-  }
-
+  value = { for k, v in yandex_compute_instance.vm : k => v.fqdn }
+}
 
 
 
@@ -68,8 +66,8 @@ output "vm_ids" {
 resource "yandex_lb_target_group" "tg-1" {
     name = "app-tg"
     target {
-        address = "${yandex_compute_instance.vm[ef3c7g7e5ljheit25nf8].network_interface.0.ip_address}"   
-        subnet_id = "${yandex_compute_instance.vm[0].id.network_interface.0.subnet_id}" 
+        address = "${yandex_compute_instance.fhml970lr5kk7bq7btun.network_interface.0.ip_address}"   
+        subnet_id = "${yandex_compute_instance.fhml970lr5kk7bq7btun.id.network_interface.0.subnet_id}" 
          
     }
     /* target {
