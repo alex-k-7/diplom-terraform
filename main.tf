@@ -57,35 +57,38 @@ resource "yandex_vpc_subnet" "subnet" {
 }
 
 output "vm_ips" {
-  value = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.ip_address }
+  value = "${local.vm_ips}"
 }
 
 output "subnets" {
-  value = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.subnet_id }
+  value = "${local.subnets}"
 }
 
+locals {
+  vm_ips  = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.ip_address }
+  subnets = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.subnet_id }
+}
 
 # target group #
-/*resource "yandex_lb_target_group" "tg-1" {
+resource "yandex_lb_target_group" "tg-1" {
     name = "app-tg"
     target {
-        address = "${yandex_compute_instance.fhml970lr5kk7bq7btun.network_interface.0.ip_address}"   
-        subnet_id = "${yandex_compute_instance.fhml970lr5kk7bq7btun.id.network_interface.0.subnet_id}" 
-         
-    }
-    /* target {
-        subnet_id = "${yandex_vpc_subnet.subnet.1.id}"
-        address = "${yandex_compute_instance.vm.1.network_interface.0.ip_address}"    
+        subnet_id = "${yandex_compute_instance.vm["ru-central1-a"].network_interface.0.subnet_id}"    
+        address   = "${yandex_compute_instance.vm["ru-central1-a"].network_interface.0.ip_address}"   
     }
      target {
-        subnet_id = "${yandex_vpc_subnet.subnet.2.id}"
-        address = "${yandex_compute_instance.vm.2.network_interface.0.ip_address}"    
-    }*/
+        subnet_id = "${yandex_compute_instance.vm["ru-central1-b"].network_interface.0.subnet_id}"    
+        address   = "${yandex_compute_instance.vm["ru-central1-b"].network_interface.0.ip_address}"    
+    }
+     target {
+        subnet_id = "${yandex_compute_instance.vm["ru-central1-c"].network_interface.0.subnet_id}"  
+        address   = "${yandex_compute_instance.vm["ru-central1-c"].network_interface.0.ip_address}"    
+    }
 
-#}
+}
 
 # balancer #
-/*resource "yandex_lb_network_load_balancer" "lb-1" {
+resource "yandex_lb_network_load_balancer" "lb-1" {
   name = "app-lb"
   listener {
     name = "app-listener"
@@ -105,8 +108,3 @@ output "subnets" {
     }
   }
 }
-*/
-
-#output "subnets" {
-#    value = { for k, v in yandex_vpc_subnet.subnet : k => v.id }
-#}
