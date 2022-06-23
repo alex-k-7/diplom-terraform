@@ -56,24 +56,12 @@ resource "yandex_vpc_subnet" "subnet" {
     }
 }
 
-output "vm_ips" {
-  value = "${local.vm_ips}"
-}
-
-output "subnets" {
-  value = "${local.subnets}"
-}
-
-locals {
-  vm_ips  = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.ip_address }
-  subnets = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.subnet_id }
-}
 # target group #
 resource "yandex_lb_target_group" "tg-1" {
     name = "app-tg"
     target {
-        address = "${lookup(local.vm_ips, "ru-central1-a" )}"  
-        subnet_id = "${lookup(local.subnets, "ru-central1-a")}"      
+        subnet_id = "${yandex_compute_instance.vm["ru-central1-a"].network_interface.0.subnet_id}"    
+        address   = "${yandex_compute_instance.vm["ru-central1-a"].network_interface.0.ip_address}" 
     }
      target {
         subnet_id = "${yandex_compute_instance.vm["ru-central1-b"].network_interface.0.subnet_id}"    
