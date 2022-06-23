@@ -56,8 +56,8 @@ resource "yandex_vpc_subnet" "subnet" {
     }
 }
 
-output "vm_ids" {
-  value = { for k, v in yandex_compute_instance.vm : k => v.fqdn }
+output "vm_ips" {
+  value = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.ip_address }
 }
 
 
