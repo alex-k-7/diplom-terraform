@@ -63,7 +63,7 @@ output "vm_ids" {
 
 
 # target group #
-resource "yandex_lb_target_group" "tg-1" {
+/*resource "yandex_lb_target_group" "tg-1" {
     name = "app-tg"
     target {
         address = "${yandex_compute_instance.fhml970lr5kk7bq7btun.network_interface.0.ip_address}"   
@@ -79,7 +79,7 @@ resource "yandex_lb_target_group" "tg-1" {
         address = "${yandex_compute_instance.vm.2.network_interface.0.ip_address}"    
     }*/
 
-}
+#}
 
 # balancer #
 resource "yandex_lb_network_load_balancer" "lb-1" {
