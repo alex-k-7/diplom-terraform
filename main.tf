@@ -30,8 +30,13 @@ resource "yandex_vpc_subnet" "subnet" {
 
 # virtual machines #
  resource "yandex_compute_instance" "vm" {
-    for_each  = yandex_vpc_subnet.subnet
-    zone = each.key
+    for_each = yandex_vpc_subnet.subnet
+    zone     = each.key
+    service_account_id = "${yandex_iam_service_account.sa-fm.id}"
+    network_interface {
+        subnet_id = each.value.id
+        nat       = true
+    }
     scheduling_policy {
         preemptible = true
     }
@@ -43,35 +48,31 @@ resource "yandex_vpc_subnet" "subnet" {
     boot_disk {
         initialize_params {
             image_id = "fd86cpunl4kkspv0u25a"
-            size = 20
+            size     = 20
         }
-    }
-    network_interface {
-        subnet_id = each.value.id
-        nat       = true
     }
     metadata = {
         user-data = "${file("user-data.txt")}"
     }
-    service_account_id = "${yandex_iam_service_account.sa-fm.id}"
 }
 
 output "vm_ids" {
-  value = yandex_compute_instance.vm
-    #for k, v in yandex_compute_instance.vm : k => v.id
-  #}
-}
+  #value = yandex_compute_instance.vm.
+    for k, v in yandex_compute_instance.vm : k => v.id
+  }
+
 
 
 
 # target group #
-/*resource "yandex_lb_target_group" "for-balancer" {
-    name = "app-balancer"
+resource "yandex_lb_target_group" "tg-1" {
+    name = "app-tg"
     target {
-        subnet_id = "${yandex_vpc_subnet.subnet.id}"
-        address = "${yandex_compute_instance.vm.id[vm_ids.0].network_interface.0.ip_address}"    
+        address = "${yandex_compute_instance.vm[ef3c7g7e5ljheit25nf8].network_interface.0.ip_address}"   
+        subnet_id = "${yandex_compute_instance.vm[0].id.network_interface.0.subnet_id}" 
+         
     }
-   /*  target {
+    /* target {
         subnet_id = "${yandex_vpc_subnet.subnet.1.id}"
         address = "${yandex_compute_instance.vm.1.network_interface.0.ip_address}"    
     }
@@ -79,8 +80,31 @@ output "vm_ids" {
         subnet_id = "${yandex_vpc_subnet.subnet.2.id}"
         address = "${yandex_compute_instance.vm.2.network_interface.0.ip_address}"    
     }*/
-#}
+
+}
+
 # balancer #
+resource "yandex_lb_network_load_balancer" "lb-1" {
+  name = "app-lb"
+  listener {
+    name = "app-listener"
+    port = 80
+    target_port = 30003
+    external_address_spec {
+      ip_version = "ipv4"
+    }
+  }
+  attached_target_group {
+    target_group_id = "${yandex_lb_target_group.tg-1.id}"
+    healthcheck {
+      name = "tcp"
+      tcp_options {
+        port = 30003
+      }
+    }
+  }
+}
+
 
 output "subnets" {
     value = yandex_vpc_subnet.subnet
