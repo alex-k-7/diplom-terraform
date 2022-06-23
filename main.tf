@@ -82,7 +82,7 @@ output "vm_ids" {
 #}
 
 # balancer #
-resource "yandex_lb_network_load_balancer" "lb-1" {
+/*resource "yandex_lb_network_load_balancer" "lb-1" {
   name = "app-lb"
   listener {
     name = "app-listener"
@@ -102,7 +102,7 @@ resource "yandex_lb_network_load_balancer" "lb-1" {
     }
   }
 }
-
+*/
 
 output "subnets" {
     value = { for k, v in yandex_vpc_subnet.subnet : k => v.id }
