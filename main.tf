@@ -60,6 +60,9 @@ output "vm_ips" {
   value = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.ip_address }
 }
 
+output "subnets" {
+  value = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.subnet_id }
+}
 
 
 # target group #
@@ -104,6 +107,6 @@ output "vm_ips" {
 }
 */
 
-output "subnets" {
-    value = { for k, v in yandex_vpc_subnet.subnet : k => v.id }
-}
+#output "subnets" {
+#    value = { for k, v in yandex_vpc_subnet.subnet : k => v.id }
+#}
