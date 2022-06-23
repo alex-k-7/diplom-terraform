@@ -68,13 +68,12 @@ locals {
   vm_ips  = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.ip_address }
   subnets = { for k, v in yandex_compute_instance.vm : k => v.network_interface.0.subnet_id }
 }
-
 # target group #
 resource "yandex_lb_target_group" "tg-1" {
     name = "app-tg"
     target {
-        subnet_id = "${yandex_compute_instance.vm["ru-central1-a"].network_interface.0.subnet_id}"    
-        address   = "${yandex_compute_instance.vm["ru-central1-a"].network_interface.0.ip_address}"   
+        address = "${lookup(local.vm_ips, "ru-central1-a" )}"  
+        subnet_id = "${lookup(local.subnets, "ru-central1-a")}"      
     }
      target {
         subnet_id = "${yandex_compute_instance.vm["ru-central1-b"].network_interface.0.subnet_id}"    
@@ -88,7 +87,7 @@ resource "yandex_lb_target_group" "tg-1" {
 }
 
 # balancer #
-resource "yandex_lb_network_load_balancer" "lb-1" {
+/*resource "yandex_lb_network_load_balancer" "lb-1" {
   name = "app-lb"
   listener {
     name = "app-listener"
@@ -108,3 +107,8 @@ resource "yandex_lb_network_load_balancer" "lb-1" {
     }
   }
 }
+*/
+
+#output "subnets" {
+#    value = { for k, v in yandex_vpc_subnet.subnet : k => v.id }
+#}
