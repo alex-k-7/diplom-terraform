@@ -32,6 +32,7 @@ resource "yandex_vpc_subnet" "subnet" {
 # virtual machines #
  resource "yandex_compute_instance" "vm" {
     for_each = yandex_vpc_subnet.subnet
+    name     = each.key
     zone     = each.value.zone
     #service_account_id = "${yandex_iam_service_account.sa-fm.id}"
     network_interface {
