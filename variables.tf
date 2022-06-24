@@ -1,4 +1,4 @@
-variable "OA_TOKEN" {
+variable "YC_SERVICE_ACCOUNT_KEY_FILE" {
     type = string
 }
 
@@ -10,6 +10,6 @@ variable "FOLDER_ID" {
     type = string
 }
 
-variable "ZONE" {
+variable "VM" {
     type = map
 }

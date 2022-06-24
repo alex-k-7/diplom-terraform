@@ -1,10 +1,10 @@
 provider "yandex" {
-    token     = var.OA_TOKEN
+    service_account_key_file = var.YC_SERVICE_ACCOUNT_KEY_FILE
     cloud_id  = var.CLOUD_ID
     folder_id = var.FOLDER_ID
 }
 
-# service account #
+/*# service account #
 resource "yandex_iam_service_account" "sa-fm" {
     name        = "folder-manager"
     description = "to manage resources in netology-diplom folder"
@@ -15,6 +15,7 @@ resource "yandex_resourcemanager_folder_iam_member" "f-edit" {
     role      = "editor"
     member    = "serviceAccount:${yandex_iam_service_account.sa-fm.id}"
 }
+*/
 
 # network #
 resource "yandex_vpc_network" "net-1" {
@@ -22,17 +23,17 @@ resource "yandex_vpc_network" "net-1" {
 }
 
 resource "yandex_vpc_subnet" "subnet" {
-    for_each = var.ZONE
-    zone           = each.key
-    v4_cidr_blocks = [each.value]
+    for_each = var.VM
+    zone           = each.value.zone
+    v4_cidr_blocks = [each.value.cidr_block]
     network_id     = "${yandex_vpc_network.net-1.id}"
 }
 
 # virtual machines #
  resource "yandex_compute_instance" "vm" {
     for_each = yandex_vpc_subnet.subnet
-    zone     = each.key
-    service_account_id = "${yandex_iam_service_account.sa-fm.id}"
+    zone     = each.value.zone
+    #service_account_id = "${yandex_iam_service_account.sa-fm.id}"
     network_interface {
         subnet_id = each.value.id
         nat       = true
@@ -55,7 +56,7 @@ resource "yandex_vpc_subnet" "subnet" {
         user-data = "${file("user-data.txt")}"
     }
 }
-
+/*
 # target group #
 resource "yandex_lb_target_group" "tg-1" {
     name = "app-tg"
@@ -96,7 +97,3 @@ resource "yandex_lb_target_group" "tg-1" {
   }
 }
 */
-
-#output "subnets" {
-#    value = { for k, v in yandex_vpc_subnet.subnet : k => v.id }
-#}

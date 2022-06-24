@@ -1,4 +1,5 @@
-ZONE = { ru-central1-a = "192.168.10.0/24"
-         ru-central1-b = "192.168.20.0/24"
-         ru-central1-c = "192.168.30.0/24"      
+VM = {
+        cp    = { zone = "ru-central1-a", cidr_block = "192.168.10.0/24" }
+        node1 = { zone = "ru-central1-b", cidr_block = "192.168.20.0/24" }  
+        node2 = { zone = "ru-central1-c", cidr_block = "192.168.30.0/24" }     
 }  
