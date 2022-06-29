@@ -25,9 +25,9 @@ resource "yandex_vpc_subnet" "subnet" {
         subnet_id = each.value.id
         nat       = true
     }
-    scheduling_policy {
-        preemptible = true
-    }
+    #scheduling_policy {
+    #    preemptible = true
+    #}
     resources {
         cores         = 2
         memory        = 2
