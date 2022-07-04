@@ -27,8 +27,8 @@ resource "yandex_vpc_subnet" "subnet" {
     }
     resources {
         cores         = 2
-        memory        = 2
-        core_fraction = 20
+        memory        = 4
+        core_fraction = 100
     }
     boot_disk {
         initialize_params {
