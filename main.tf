@@ -21,6 +21,7 @@ resource "yandex_vpc_subnet" "subnet" {
     for_each = yandex_vpc_subnet.subnet
     name     = each.key
     zone     = each.value.zone
+    allow_stopping_for_update = true
     network_interface {
         subnet_id = each.value.id
         nat       = true
