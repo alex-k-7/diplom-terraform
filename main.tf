@@ -69,6 +69,14 @@ resource "yandex_lb_network_load_balancer" "lb-1" {
         external_address_spec {
             ip_version = "ipv4"
         }
+    }    
+    listener {
+        name = "grafana-listener"
+        port = 8080
+        target_port = 30902
+        external_address_spec {
+            ip_version = "ipv4"
+        }
     }
     attached_target_group {
         target_group_id = "${yandex_lb_target_group.tg-1.id}"
@@ -76,6 +84,12 @@ resource "yandex_lb_network_load_balancer" "lb-1" {
             name = "tcp"
             tcp_options {
                 port = 30003
+            }
+        }
+        healthcheck {
+            name = "tcp"
+            tcp_options {
+                port = 30902
             }
         }
     }
