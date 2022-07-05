@@ -81,12 +81,9 @@ resource "yandex_lb_network_load_balancer" "lb-1" {
     attached_target_group {
         target_group_id = "${yandex_lb_target_group.tg-1.id}"
         healthcheck {
-            name = "cheks"
+            name = "app_check"
             http_options {
                 port = 30003
-            }
-            tcp_options {
-                port = 30902
             }
         }
     }
